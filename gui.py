@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("EssayGrader")
         self.setFixedSize(400, 450)
@@ -24,8 +24,8 @@ class MainWindow(QMainWindow):
         self.setup_screen2()
         self.stacked_widget.addWidget(self.screen2)
 
-    def setup_screen1(self):
-        layout = QVBoxLayout(self.screen1)
+    def setup_screen1(self) -> None:
+        layout: QVBoxLayout = QVBoxLayout(self.screen1)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(15)
@@ -67,8 +67,8 @@ class MainWindow(QMainWindow):
         button_layout.addWidget(next_button)
         layout.addLayout(button_layout)
 
-    def limit_text(self):
-        text = self.text_input.toPlainText()
+    def limit_text(self) -> None:
+        text: str = self.text_input.toPlainText()
         if len(text) > 500:
             self.text_input.setPlainText(text[:500])
             # Move cursor to the end
@@ -77,8 +77,8 @@ class MainWindow(QMainWindow):
             self.text_input.setTextCursor(cursor)
         self.char_count_label.setText(f"{len(self.text_input.toPlainText())}/500")
 
-    def setup_screen2(self):
-        layout = QVBoxLayout(self.screen2)
+    def setup_screen2(self) -> None:
+        layout: QVBoxLayout = QVBoxLayout(self.screen2)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
         layout.setContentsMargins(20, 20, 20, 20)
         layout.setSpacing(10)
@@ -116,8 +116,8 @@ class MainWindow(QMainWindow):
         button_layout.addWidget(quit_button)
         layout.addLayout(button_layout)
 
-    def go_to_screen1(self):
+    def go_to_screen1(self) -> None:
         self.stacked_widget.setCurrentIndex(0)
 
-    def go_to_screen2(self):
+    def go_to_screen2(self) -> None:
         self.stacked_widget.setCurrentIndex(1)
