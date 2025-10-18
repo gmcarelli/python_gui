@@ -1,7 +1,8 @@
 import sys
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QLabel, QTextEdit, QPushButton, QStackedWidget, QGroupBox, QRadioButton
+    QLabel, QTextEdit, QPushButton, QStackedWidget, QGroupBox, QRadioButton,
+    QFileDialog, QListWidget
 )
 from PySide6.QtCore import Qt
 
@@ -23,6 +24,11 @@ class MainWindow(QMainWindow):
         self.screen2 = QWidget()
         self.setup_screen2()
         self.stacked_widget.addWidget(self.screen2)
+
+        # Create the third screen (widget)
+        self.screen3 = QWidget()
+        self.setup_screen3()
+        self.stacked_widget.addWidget(self.screen3)
 
     def setup_screen1(self) -> None:
         layout: QVBoxLayout = QVBoxLayout(self.screen1)
@@ -105,14 +111,14 @@ class MainWindow(QMainWindow):
         button_layout = QHBoxLayout()
         back_button = QPushButton("Back")
         back_button.clicked.connect(self.go_to_screen1)
-        grade_now_button = QPushButton("Grade Now")
-        # grade_now_button.clicked.connect(self.grade_now) # Placeholder
+        next_button = QPushButton("Next")
+        next_button.clicked.connect(self.go_to_screen3)
         quit_button = QPushButton("Quit")
         quit_button.clicked.connect(QApplication.instance().quit)
 
         button_layout.addWidget(back_button)
         button_layout.addStretch()
-        button_layout.addWidget(grade_now_button)
+        button_layout.addWidget(next_button)
         button_layout.addWidget(quit_button)
         layout.addLayout(button_layout)
 
@@ -121,3 +127,58 @@ class MainWindow(QMainWindow):
 
     def go_to_screen2(self) -> None:
         self.stacked_widget.setCurrentIndex(1)
+
+    def go_to_screen3(self) -> None:
+        self.stacked_widget.setCurrentIndex(2)
+
+    def setup_screen3(self) -> None:
+        layout: QVBoxLayout = QVBoxLayout(self.screen3)
+        layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        layout.setContentsMargins(20, 20, 20, 20)
+        layout.setSpacing(15)
+
+        # Title label
+        title_label = QLabel("Upload de Arquivos")
+        font = title_label.font()
+        font.setPointSize(16)
+        font.setBold(True)
+        title_label.setFont(font)
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(title_label)
+
+        # File list widget
+        self.file_list_widget = QListWidget()
+        layout.addWidget(self.file_list_widget)
+
+        # Upload button
+        upload_button = QPushButton("Selecionar Arquivos...")
+        upload_button.clicked.connect(self.open_file_dialog)
+        layout.addWidget(upload_button)
+
+        # Buttons
+        button_layout = QHBoxLayout()
+        back_button = QPushButton("Back")
+        back_button.clicked.connect(self.go_to_screen2)
+        grade_now_button = QPushButton("Grade Now")
+        grade_now_button.clicked.connect(self.grade_now)
+
+        button_layout.addWidget(back_button)
+        button_layout.addStretch()
+        button_layout.addWidget(grade_now_button)
+        layout.addLayout(button_layout)
+
+    def grade_now(self) -> None:
+        # Placeholder for the grading logic
+        print("Grading logic to be implemented...")
+        # For now, it can just close the app
+        QApplication.instance().quit()
+
+    def open_file_dialog(self) -> None:
+        file_paths, _ = QFileDialog.getOpenFileNames(
+            self,
+            "Selecionar Arquivos",
+            "", # Start directory
+            "Todos os arquivos (*);;Documentos de Texto (*.txt);;Imagens (*.png *.jpg)"
+        )
+        if file_paths:
+            self.file_list_widget.addItems(file_paths)
